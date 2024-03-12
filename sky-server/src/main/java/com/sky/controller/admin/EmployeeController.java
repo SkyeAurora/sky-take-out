@@ -13,6 +13,7 @@ import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -105,6 +106,54 @@ public class EmployeeController {
         PageResult pageResult = employeeService.pageSelectEmployee(employeePageQueryDTO);
 
         return Result.success(pageResult);
+    }
+
+    /**
+     * 启用、禁用员工账号
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用、禁用员工账号")
+    public Result setStatus(@PathVariable Integer status, Long id) {
+        log.info("启用、禁用员工账号,id:{},status:{}", id, status);
+
+        employeeService.setStatus(status, id);
+
+        return Result.success();
+    }
+
+    /**
+     * 编辑员工信息
+     *
+     * @param employeeDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("编辑员工信息")
+    public Result modifyEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("编辑员工信息:{}", employeeDTO);
+
+        employeeService.modifyEmployee(employeeDTO);
+
+        return Result.success();
+    }
+
+    /**
+     * 根据 Id 查询员工数据
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据Id查询员工数据")
+    public Result<Employee> getEmployeeById(@PathVariable Long id) {
+
+        Employee employee = employeeService.getEmployeeById(id);
+
+        return Result.success(employee);
     }
 
 }

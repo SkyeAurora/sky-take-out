@@ -7,7 +7,6 @@ import com.sky.entity.Employee;
 import com.sky.result.PageResult;
 
 public interface EmployeeService {
-
     /**
      * 员工登录
      *
@@ -30,4 +29,26 @@ public interface EmployeeService {
      * @return
      */
     PageResult pageSelectEmployee(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+     * 设置员工帐号状态
+     *
+     * @param status
+     * @param id
+     */
+    void setStatus(Integer status, Long id);
+
+    /**
+     * 编辑员工信息
+     *
+     * @param employeeDTO
+     */
+    void modifyEmployee(EmployeeDTO employeeDTO);
+
+    /**
+     * 根据 Id 查询员工信息
+     * @param id
+     * @return
+     */
+    Employee getEmployeeById(Long id);
 }
