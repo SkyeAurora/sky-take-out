@@ -151,6 +151,8 @@ public class EmployeeController {
     @ApiOperation("根据Id查询员工数据")
     public Result<Employee> getEmployeeById(@PathVariable Long id) {
 
+        log.info("根据 Id 查询员工数据,id:{}", id);
+
         Employee employee = employeeService.getEmployeeById(id);
 
         return Result.success(employee);
