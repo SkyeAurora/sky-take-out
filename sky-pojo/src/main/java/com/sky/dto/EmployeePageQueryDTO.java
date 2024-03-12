@@ -1,5 +1,6 @@
 package com.sky.dto;
 
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
 import java.io.Serializable;
