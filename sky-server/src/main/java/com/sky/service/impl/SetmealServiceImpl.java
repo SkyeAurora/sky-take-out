@@ -84,9 +84,8 @@ public class SetmealServiceImpl implements SetmealService {
     public void deleteSetmeals(List<Long> ids) {
         //判断是否可以被删除 -- 是否正处于起售状态 ？
         for (Long id : ids) {
-            Setmeal setmeal=setmealMapper.getById(id);
-            if(setmeal.getStatus() == 1)
-            {
+            Setmeal setmeal = setmealMapper.getById(id);
+            if (setmeal.getStatus() == 1) {
                 throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
             }
         }
@@ -94,5 +93,20 @@ public class SetmealServiceImpl implements SetmealService {
         setmealMapper.deleteByIds(ids);
         //删除setmealDish表中套餐对应的菜品数据
         setmealDishMapper.deleteBySetmealIds(ids);
+    }
+
+    /**
+     * 根据主键Id查询套餐
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public SetmealVO getById(Long id) {
+        SetmealVO setmealVO = setmealMapper.selectById(id);
+
+        setmealVO.setSetmealDishes(setmealDishMapper.selectBySetmealId(id));
+
+        return setmealVO;
     }
 }
