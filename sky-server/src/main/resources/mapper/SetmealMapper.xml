@@ -48,13 +48,13 @@
         left outer join category c on s.category_id = c.id
         <where>
             <if test="name != null and name != ''">
-                s.name = #{name}
+                s.name like concat('%',name,'%')
             </if>
             <if test="categoryId != null">
-                s.category_id = #{categoryId}
+                and s.category_id = #{categoryId}
             </if>
             <if test="status != null">
-                s.status = #{status}
+                and s.status = #{status}
             </if>
         </where>
     </select>
