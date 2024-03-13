@@ -106,4 +106,22 @@ public class DishController {
         return Result.success();
     }
 
+    /**
+     * 设置菜品状态 1 起售 0 停售
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("设置菜品起售、停售")
+    public Result setStatus(@PathVariable Integer status, Long id) {
+
+        log.info("设置菜品状态,{},{}",status,id);
+
+        dishService.setStatus(status,id);
+
+        return Result.success();
+    }
+
 }
