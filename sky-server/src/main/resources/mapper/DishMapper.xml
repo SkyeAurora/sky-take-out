@@ -11,7 +11,7 @@
     </insert>
 
     <select id="pageQuery" resultType="com.sky.vo.DishVO">
-        select d.*,c.name as categeoryName from dish d left outer join category c on d.category_id = c.id
+        select d.* , c.name as categoryName from dish d left outer join category c on d.category_id = c.id
         <where>
             <if test="name != null and name != ''">
                 d.name like concat('%',#{name},'%')
