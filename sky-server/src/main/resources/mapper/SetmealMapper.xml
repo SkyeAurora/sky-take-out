@@ -9,4 +9,21 @@
         values (#{categoryId}, #{name}, #{price}, #{description}, #{image}, #{createTime}, #{updateTime}, #{createUser},
                 #{updateUser}, #{status})
     </insert>
+
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        select s.*, c.name
+        from setmeal s
+        left outer join category c on s.category_id = c.id
+        <where>
+            <if test="name != null and name != ''">
+                s.name = #{name}
+            </if>
+            <if test="categoryId != null">
+                s.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                s.status = #{status}
+            </if>
+        </where>
+    </select>
 </mapper>
