@@ -2,13 +2,10 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.annoation.AutoFill;
-import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.DishVO;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -23,7 +20,7 @@ public interface DishMapper {
      * @param categoryId
      */
     @Select("select count(*) from dish where category_id = #{categoryId}")
-    public Integer countByCategoryId(Long categoryId);
+    Integer countByCategoryId(Long categoryId);
 
     /**
      * 新增菜品
