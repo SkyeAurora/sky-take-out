@@ -109,8 +109,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         List<ShoppingCart> carts = shoppingCartMapper.selectByExample(shoppingCart);
         ShoppingCart cart = carts.get(0);
         shoppingCartMapper.deleteById(shoppingCart);
-        if(cart.getNumber() > 1)
-        {
+        if (cart.getNumber() > 1) {
             //修改number 和 amount 并重新插入
             BigDecimal amount = cart.getAmount();
             if (shoppingCartDTO.getDishId() != null) {
@@ -126,5 +125,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             cart.setAmount(amount);
             shoppingCartMapper.insert(cart);
         }
+    }
+
+    /**
+     * 清空购物车
+     */
+    @Override
+    public void clean() {
+        Long userId = BaseContext.getCurrentId();
+        shoppingCartMapper.deleteByUserId(userId);
     }
 }
