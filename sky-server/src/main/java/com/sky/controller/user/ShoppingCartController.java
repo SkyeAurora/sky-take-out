@@ -39,7 +39,7 @@ public class ShoppingCartController {
     }
 
     /**
-     * 查看当前用户的购物车菜品
+     * 查看当前用户的购物车商品
      *
      * @return
      */
@@ -49,5 +49,20 @@ public class ShoppingCartController {
         log.info("查看当前用户的购物车菜品");
         List<ShoppingCart> list = shoppingCartService.selectByUserId();
         return Result.success(list);
+    }
+
+    /**
+     * 删除购物车中的单个商品
+     * @param shoppingCartDTO
+     * @return
+     */
+    @PostMapping("/sub")
+    @ApiOperation("删除购物车中的单个商品")
+    public Result sub(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        log.info("删除购物车中的单个商品,{}",shoppingCartDTO);
+
+        shoppingCartService.sub(shoppingCartDTO);
+
+        return Result.success();
     }
 }

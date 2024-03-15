@@ -12,6 +12,7 @@ import com.sky.service.ShoppingCartService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
+
     @Autowired
     private DishMapper dishMapper;
     @Autowired
@@ -46,6 +48,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         //如果是，执行update操作更新number和amount
         if (carts != null && carts.size() != 0) {
             ShoppingCart cart = carts.get(0);
+
             BigDecimal amount = cart.getAmount();
             if (shoppingCartDTO.getDishId() != null) {
                 Dish dish = dishMapper.getById(shoppingCartDTO.getDishId());
@@ -88,7 +91,40 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         Long userId = BaseContext.getCurrentId();
 
         return shoppingCartMapper.selectByUserId(userId);
+    }
 
-
+    /**
+     * 删除购物车中的单个商品
+     *
+     * @param shoppingCartDTO
+     */
+    @Override
+    @Transactional //涉及多次表操作，设置事务属性
+    public void sub(ShoppingCartDTO shoppingCartDTO) {
+        //封装到ShoppingCart对象中再删除（因为还有userId）
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        shoppingCart.setUserId(BaseContext.getCurrentId());
+        //直接删除 并得到删除的这个对象（要判断个数是否大于1，然后决定是否重新插入）
+        List<ShoppingCart> carts = shoppingCartMapper.selectByExample(shoppingCart);
+        ShoppingCart cart = carts.get(0);
+        shoppingCartMapper.deleteById(shoppingCart);
+        if(cart.getNumber() > 1)
+        {
+            //修改number 和 amount 并重新插入
+            BigDecimal amount = cart.getAmount();
+            if (shoppingCartDTO.getDishId() != null) {
+                Dish dish = dishMapper.getById(shoppingCartDTO.getDishId());
+                BigDecimal price = dish.getPrice();
+                amount = amount.subtract(price);
+            } else {
+                Setmeal setmeal = setmealMapper.getById(cart.getSetmealId());
+                BigDecimal price = setmeal.getPrice();
+                amount = amount.subtract(price);
+            }
+            cart.setNumber(cart.getNumber() - 1);
+            cart.setAmount(amount);
+            shoppingCartMapper.insert(cart);
+        }
     }
 }

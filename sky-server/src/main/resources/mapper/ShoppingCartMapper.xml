@@ -16,6 +16,23 @@
             amount = #{amount}
         where id = #{id}
     </update>
+    <delete id="deleteById" >
+        delete from shopping_cart
+        <where>
+            <if test="dishId != null">
+                dish_id = #{dishId}
+            </if>
+            <if test="setmealId != null">
+                and setmeal_id = #{setmealId}
+            </if>
+            <if test="dishFlavor != null">
+                and dish_flavor = #{dishFlavor}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </delete>
 
     <select id="selectByExample" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart

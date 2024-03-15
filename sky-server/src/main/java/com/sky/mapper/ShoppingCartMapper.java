@@ -42,4 +42,12 @@ public interface ShoppingCartMapper {
      */
     @Select("select * from shopping_cart where user_id = #{userId}")
     List<ShoppingCart> selectByUserId(Long userId);
+
+    /**
+     * 删除指定商品
+     * @param shoppingCart
+     * @return
+     */
+
+    void deleteById(ShoppingCart shoppingCart);
 }

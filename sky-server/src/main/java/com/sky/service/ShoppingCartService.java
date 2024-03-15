@@ -21,4 +21,10 @@ public interface ShoppingCartService {
      */
     List<ShoppingCart> selectByUserId();
 
+    /**
+     * 删除购物车中的单个商品
+     *
+     * @param shoppingCartDTO
+     */
+    void sub(ShoppingCartDTO shoppingCartDTO);
 }
