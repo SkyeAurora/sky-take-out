@@ -36,7 +36,7 @@ public class DishController {
     @ApiOperation("根据分类id查询菜品")
     public Result<List<DishVO>> list(Long categoryId) {
         //构造redis中的Key
-        String key = "dish" + categoryId;
+        String key = "dish_" + categoryId;
         //查询Redis中是否存在菜品数据
         List<DishVO> list = (List<DishVO>) redisTemplate.opsForValue().get(key);
         //如果存在，直接返回，无需访问数据库
