@@ -114,10 +114,10 @@ public class CategoryController {
      */
     @GetMapping("/list")
     @ApiOperation("根据类型查询分类数据")
-    public Result<List> getCategoryByType() {
+    public Result<List> getCategoryByType(Integer type) {
         log.info("查询分类数据");
 
-        List<Category> list = categoryService.getCategory();
+        List<Category> list = categoryService.getCategoryById(type);
 
         return Result.success(list);
     }

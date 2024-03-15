@@ -119,9 +119,24 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.update(category);
     }
 
+    /**
+     * 查询所有套餐数据
+     * @return
+     */
     @Override
     public List<Category> getCategory() {
         List<Category> list = categoryMapper.selectAllType();
+        return list;
+    }
+
+    /**
+     * 根据主键id查询套餐数据
+     * @param type
+     * @return
+     */
+    @Override
+    public List<Category> getCategoryById(Integer type) {
+        List<Category> list = categoryMapper.selectByType(type);
         return list;
     }
 }

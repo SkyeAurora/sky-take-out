@@ -50,4 +50,11 @@ public interface CategoryService {
      * @return
      */
     List<Category> getCategory();
+
+    /**
+     * 根据主键id查询套餐数据
+     * @param type
+     * @return
+     */
+    List<Category> getCategoryById(Integer type);
 }
