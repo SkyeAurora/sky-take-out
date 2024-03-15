@@ -110,15 +110,14 @@ public class CategoryController {
     /**
      * 根据种类获取分类数据 1 菜品 2 套餐
      *
-     * @param type
      * @return
      */
     @GetMapping("/list")
     @ApiOperation("根据类型查询分类数据")
-    public Result<List> getCategoryByType(Integer type) {
-        log.info("根据类型查询分类数据,type:{}", type);
+    public Result<List> getCategoryByType() {
+        log.info("查询分类数据");
 
-        List<Category> list = categoryService.getCategoryByType(type);
+        List<Category> list = categoryService.getCategory();
 
         return Result.success(list);
     }

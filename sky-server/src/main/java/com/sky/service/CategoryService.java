@@ -45,9 +45,9 @@ public interface CategoryService {
     void modifyCategory(CategoryDTO categoryDTO);
 
     /**
-     * 根据类型查询分类数据
-     * @param type
+     * 查询所有分类数据
+     *
      * @return
      */
-    List<Category> getCategoryByType(Integer type);
+    List<Category> getCategory();
 }
