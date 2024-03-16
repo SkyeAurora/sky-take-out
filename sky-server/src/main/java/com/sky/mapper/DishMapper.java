@@ -61,7 +61,7 @@ public interface DishMapper {
     void update(Dish dish);
 
     /**
-     * 根据 categoryId 询菜品数据
+     * 根据 categoryId 查询菜品数据
      * @param categoryId
      * @return
      */
