@@ -59,12 +59,14 @@ public interface OrderService {
 
     /**
      * 再来一单
+     *
      * @param id
      */
     void repetition(Long id);
 
     /**
      * 订单条件查询
+     *
      * @param ordersPageQueryDTO
      * @return
      */
@@ -73,8 +75,8 @@ public interface OrderService {
 
     /**
      * 各个状态的订单数量
+     *
      * @return
      */
     OrderStatisticsVO statistics();
-
 }
