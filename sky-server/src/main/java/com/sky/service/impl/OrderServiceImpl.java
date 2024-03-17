@@ -10,6 +10,7 @@ import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
+import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.*;
 import com.sky.result.PageResult;
@@ -207,10 +208,53 @@ public class OrderServiceImpl implements OrderService {
         Orders orders = orderMapper.selectById(id);
 
         OrderVO orderVO = new OrderVO();
-        BeanUtils.copyProperties(orders,orderVO);
+        BeanUtils.copyProperties(orders, orderVO);
 
         orderVO.setOrderDetailList(orderDetailMapper.selectByOrderId(id));
 
         return orderVO;
+    }
+
+    /**
+     * 取消订单
+     * <p>
+     * - 待支付和待接单状态下，用户可直接取消订单
+     * - 商家已接单状态下，用户取消订单需电话沟通商家
+     * - 派送中状态下，用户取消订单需电话沟通商家
+     * - 如果在待接单状态下取消订单，需要给用户退款
+     * - 取消订单后需要将订单状态修改为“已取消”
+     *
+     * @param id
+     */
+    @Override
+    public void userCancelOrderById(Long id) throws Exception {
+        Orders order = orderMapper.selectById(id);
+
+        if (order == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        if (order.getStatus() > 2) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Orders newOrder = new Orders();
+        newOrder.setId(order.getId());
+        //如果为待接单状态，需要先退款
+        if (order.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            //调用微信支付退款接口
+//            weChatPayUtil.refund(
+//                    order.getNumber(), //商户订单号
+//                    order.getNumber(), //商户退款单号
+//                    new BigDecimal(0.01),//退款金额，单位 元
+//                    new BigDecimal(0.01));//原订单金额
+
+            newOrder.setPayStatus(Orders.REFUND);
+        }
+
+        // 更新订单状态、取消原因、取消时间
+        newOrder.setStatus(Orders.CANCELLED);
+        newOrder.setCancelReason("用户取消");
+        newOrder.setCancelTime(LocalDateTime.now());
+        orderMapper.update(newOrder);
     }
 }
