@@ -14,12 +14,14 @@ import java.time.LocalDateTime;
 public interface OrderMapper {
     /**
      * 新增一条订单数据
+     *
      * @param orders
      */
     void insert(Orders orders);
 
     /**
      * 根据订单号查询订单
+     *
      * @param orderNumber
      */
     @Select("select * from orders where number = #{orderNumber}")
@@ -27,12 +29,14 @@ public interface OrderMapper {
 
     /**
      * 修改订单信息
+     *
      * @param orders
      */
     void update(Orders orders);
 
     /**
      * 更新
+     *
      * @param orderStatus
      * @param orderPaidStatus
      * @param check_out_time
@@ -42,11 +46,20 @@ public interface OrderMapper {
     void updateStatus(Integer orderStatus, Integer orderPaidStatus, LocalDateTime check_out_time, Long id);
 
 
-
     /**
      * 根据userId及状态分页查询历史订单信息
+     *
      * @param ordersPageQueryDTO
      * @return
      */
     Page<Orders> selectAllOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 根据主键查询订单详情
+     *
+     * @param id
+     * @return
+     */
+    @Select("select * from orders where id =#{id}")
+    Orders selectById(Long id);
 }
