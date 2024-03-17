@@ -35,8 +35,8 @@ public interface OrderService {
     /**
      * 分页查询历史订单信息
      *
-     * @param ordersPageQueryDTO
+     * @param
      * @return
      */
-    PageResult getAllOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+    PageResult getAllOrders(int pageNum, int pageSize, Integer status);
 }

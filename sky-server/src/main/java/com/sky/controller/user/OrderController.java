@@ -65,12 +65,14 @@ public class OrderController {
      */
     @GetMapping("/historyOrders")
     @ApiOperation("分页查询历史订单信息")
-    public Result<PageResult> getAllOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
-        log.info("分页查询历史订单信息,{}", ordersPageQueryDTO);
+    public Result<PageResult> getAllOrders(int page, int pageSize, Integer status) {
+        log.info("分页查询历史订单信息,pageNum:{},pageSize:{},status:{}", page,pageSize ,status);
 
-        PageResult pageResult = orderService.getAllOrders(ordersPageQueryDTO);
+        PageResult pageResult = orderService.getAllOrders(page,pageSize ,status);
 
         return Result.success(pageResult);
     }
+
+
 
 }
