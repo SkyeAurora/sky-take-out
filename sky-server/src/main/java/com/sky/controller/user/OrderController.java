@@ -88,12 +88,13 @@ public class OrderController {
 
     /**
      * 取消订单
+     *
      * @param id
      * @return
      */
     @PutMapping("/cancel/{id}")
     @ApiOperation("取消订单")
-    public Result userCancelOrderById(@PathVariable Long id) throws Exception{
+    public Result userCancelOrderById(@PathVariable Long id) throws Exception {
         log.info("取消订单");
 
         orderService.userCancelOrderById(id);
@@ -103,16 +104,31 @@ public class OrderController {
 
     /**
      * 再来一单
+     *
      * @param id
      * @return
      */
     @PostMapping("/repetition/{id}")
     @ApiOperation("再来一单")
-    public Result repetition(@PathVariable Long id){
+    public Result repetition(@PathVariable Long id) {
         log.info("再来一单");
 
         orderService.repetition(id);
 
+        return Result.success();
+    }
+
+    /**
+     * 用户催单
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("用户催单")
+    public Result reminder(@PathVariable Long id) {
+        log.info("用户催单:{}", id);
+        orderService.reminder(id);
         return Result.success();
     }
 
