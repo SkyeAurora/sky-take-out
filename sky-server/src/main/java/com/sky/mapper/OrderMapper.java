@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Update;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -89,4 +90,11 @@ public interface OrderMapper {
      */
     @Update("update orders set status = #{status} where id = #{id}")
     void setStatus(Long id, Integer status);
+
+    /**
+     * 计算某一时间段内的营业额
+     * @param map
+     * @return
+     */
+    Double sumByMap(Map map);
 }
