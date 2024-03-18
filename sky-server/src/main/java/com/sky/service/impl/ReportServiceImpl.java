@@ -1,12 +1,11 @@
 package com.sky.service.impl;
 
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
-import com.sky.vo.OrderReportVO;
-import com.sky.vo.OrderStatisticsVO;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
+import com.sky.vo.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +17,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 指定时间区间内营业额统计
@@ -81,10 +83,10 @@ public class ReportServiceImpl implements ReportService {
             Map map = new HashMap<>();
             map.put("end", endTime);
             //统计总用户数量
-            Integer totalUser = orderMapper.countByMap(map);
+            Integer totalUser = userMapper.countByMap(map);
             //统计新用户数量
             map.put("begin", beginTime);
-            Integer newUser = orderMapper.countByMap(map);
+            Integer newUser = userMapper.countByMap(map);
 
             totalUserList.add(totalUser);
             newUserList.add(newUser);
@@ -110,7 +112,7 @@ public class ReportServiceImpl implements ReportService {
         List<Integer> validOrderCountList = new ArrayList<>();   //每日有效订单数
         Integer totalOrderCount = 0;    //订单总数
         Integer validOrderCount = 0;    //有效订单数
-        Double orderCompletionRate=0.0;//订单完成率
+        Double orderCompletionRate = 0.0;//订单完成率
         for (LocalDate date : dateList) {
             //根据LocalDate构造具体的LocalDateTime对象
             LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);//获得date这一天的开始时间对象
@@ -156,5 +158,28 @@ public class ReportServiceImpl implements ReportService {
             dateList.add(begin);
         }
         return dateList;
+    }
+
+    /**
+     * 销量排名 top10
+     *
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end) {
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+        List<GoodsSalesDTO> salesTop10 = orderMapper.getSalesTop10(beginTime, endTime);
+        List<String> names = salesTop10.stream().map(GoodsSalesDTO::getName).collect(Collectors.toList());
+        String nameList = StringUtils.join(names, ",");
+        List<Integer> numbers = salesTop10.stream().map(GoodsSalesDTO::getNumber).collect(Collectors.toList());
+        String numberList = StringUtils.join(numbers, ",");
+
+        return SalesTop10ReportVO.builder()
+                .nameList(nameList)
+                .numberList(numberList)
+                .build();
     }
 }

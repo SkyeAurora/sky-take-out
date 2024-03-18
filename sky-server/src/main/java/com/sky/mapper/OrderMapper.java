@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
@@ -100,17 +101,17 @@ public interface OrderMapper {
     Double sumByMap(Map map);
 
     /**
-     * 计算用户数量
-     *
-     * @param map
-     * @return
-     */
-    Integer countByMap(Map map);
-
-    /**
      * 统计订单数据
      * @param map
      * @return
      */
     Integer countOrdersByMap(Map map);
+
+    /**
+     * 统计销量top10
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    List<GoodsSalesDTO> getSalesTop10(LocalDateTime beginTime, LocalDateTime endTime);
 }
