@@ -93,8 +93,24 @@ public interface OrderMapper {
 
     /**
      * 计算某一时间段内的营业额
+     *
      * @param map
      * @return
      */
     Double sumByMap(Map map);
+
+    /**
+     * 计算用户数量
+     *
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
+
+    /**
+     * 统计订单数据
+     * @param map
+     * @return
+     */
+    Integer countOrdersByMap(Map map);
 }
