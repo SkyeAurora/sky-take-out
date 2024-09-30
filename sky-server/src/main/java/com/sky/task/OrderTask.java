@@ -24,8 +24,8 @@ public class OrderTask {
     public void processTimeOut() {
         log.info("定时处理超时订单:{}", LocalDateTime.now());
 
-        //查询哪些订单处于待付款超过 15min
-        //select * from orders where status = ? and order_time < (当前时间 -15min)
+        // 查询哪些订单处于待付款超过 15min
+        // select * from orders where status = ? and order_time < (当前时间 -15min)
         List<Orders> orders = orderMapper.selectByStatus(Orders.PENDING_PAYMENT, LocalDateTime.now().plusMinutes(-15));
 
         if (orders != null && orders.size() > 0) {

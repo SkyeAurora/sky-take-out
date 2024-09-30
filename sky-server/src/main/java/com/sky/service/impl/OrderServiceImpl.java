@@ -87,20 +87,20 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.insert(orders);
 
-        //向订单明细表插入n条数据
+        // 向订单明细表插入n条数据
         List<OrderDetail> list = new ArrayList<>();
         for (ShoppingCart cart : carts) {
             OrderDetail orderDetail = new OrderDetail();
             BeanUtils.copyProperties(cart, orderDetail);
-            orderDetail.setOrderId(orders.getId()); //设置当前订单明细对应的订单Id
+            orderDetail.setOrderId(orders.getId()); // 设置当前订单明细对应的订单Id
             list.add(orderDetail);
         }
 
         orderDetailMapper.insertBatch(list);
-        //清空当前用户购物车数据
+        // 清空当前用户购物车数据
         shoppingCartMapper.deleteByUserId(userId);
 
-        //封装VO返回结果
+        // 封装VO返回结果
         return OrderSubmitVO.builder()
                 .id(orders.getId())
                 .orderNumber(orders.getNumber())
@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
 
         //通过websocket向客户端推送消息 type orderId content
         Map map = new HashMap();
-        map.put("type", 1); //1 来单提醒 2 客户催单
+        map.put("type", 1);  // 1 来单提醒 2 客户催单
         map.put("orderId", orders.getId());
         map.put("content", "订单号" + this.orders.getNumber());
 
@@ -173,9 +173,6 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
-
-
-
     }
 
     /**
@@ -500,6 +497,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 用户催单
+     *
      * @param id
      */
     @Override

@@ -1,0 +1,32 @@
+# 数据库配置
+sky:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL驱动类名称
+    host: # 数据库服务器IP地址
+    port: 3306 # 数据库端口号
+    database: sky_take_out # 数据库名称
+    username: # 数据库用户名
+    password: # 数据库密码
+
+  alioss:
+    endpoint: oss-cn-beijing.aliyuncs.com # 阿里云OSS服务端点
+    access-key-id:  # 阿里云访问密钥ID
+    access-key-secret: # 阿里云访问密钥秘密
+    bucket-name: web-huaperion # OSS存储桶名称
+
+  redis:
+    host:  # Redis服务器IP地址
+    port: 6379 # Redis端口号
+    password:  # Redis密码
+    database: 0 # Redis数据库索引
+
+  wechat:
+    appid: # 微信公众平台AppID
+    secret: # 微信公众平台AppSecret
+    mchid: # 微信支付商户号
+    mchSerialNo: # 商户证书序列号
+    privateKeyFilePath: # 商户私钥文件路径
+    apiV3Key: # API V3密钥
+    weChatPayCertFilePath: # 微信支付证书文件路径
+    notifyUrl: http://79dea95a.r17.cpolar.top/notify/paySuccess # 支付成功通知URL
+    refundNotifyUrl: http://79dea95a.r17.cpolar.top/notify/refundSuccess # 退款成功通知URL
