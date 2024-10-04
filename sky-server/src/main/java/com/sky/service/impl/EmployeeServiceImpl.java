@@ -24,6 +24,7 @@ import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -49,19 +50,19 @@ public class EmployeeServiceImpl implements EmployeeService {
             //账号不存在
             throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
         }
-
-        //密码比对
-        //对前端传入的明文密码进行md5加密处理
-        password = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
-
-        if (!password.equals(employee.getPassword())) {
-            //密码错误
-            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
-        }
-
         if (employee.getStatus() == StatusConstant.DISABLE) {
             //账号被锁定
             throw new AccountLockedException(MessageConstant.ACCOUNT_LOCKED);
+        }
+
+        // 密码比对
+        // 对前端传入的明文密码进行md5加密处理
+        String securePassword = employee.getPassword();
+        String[] split = securePassword.split("\\$");
+        String salt = split[1];
+        String finalPassword = split[0];
+        if (!finalPassword.equals(DigestUtils.md5DigestAsHex((password + salt).getBytes(StandardCharsets.UTF_8)))) {
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
 
         //3、返回实体对象
@@ -82,7 +83,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employee.setStatus(StatusConstant.ENABLE);  //账号默认正常状态 StatusConstant.ENABLE
         //设置默认密码 123456 md5加密后存入数据库
-        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes(StandardCharsets.UTF_8)));
+        String salt = UUID.randomUUID().toString();
+        employee.setPassword(DigestUtils.md5DigestAsHex((PasswordConstant.DEFAULT_PASSWORD + salt).getBytes(StandardCharsets.UTF_8)) + "$" + salt);
         //设置当前记录创建人id和修改人id
         employeeMapper.insert(employee);
     }
@@ -158,6 +160,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword("******");
         return employee;
     }
-
-
 }
